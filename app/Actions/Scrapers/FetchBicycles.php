@@ -38,7 +38,7 @@ class FetchBicycles
             'date_from' => $dateFrom->format('d-m-Y'),
             'date_to' => $dateTo->format('d-m-Y'),
             'timestamp' => now()->timestamp,
-            'from' => $from
+            'from' => $from,
         ]);
 
         $hits = collect($response->json('hits.hits'));
@@ -60,6 +60,7 @@ class FetchBicycles
 
         if ($upserts->isEmpty()) {
             $command->info('Done processing');
+
             return;
         }
 

@@ -15,7 +15,7 @@ class Bicycle extends Model
         'description',
         'city',
         'storage_location',
-        'registered_at'
+        'registered_at',
     ];
 
     protected $casts = [

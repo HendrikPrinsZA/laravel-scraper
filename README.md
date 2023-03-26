@@ -1,6 +1,6 @@
 # Laravel Scraper
 <p align="center">
-<img src="resources/images/cowboy-in-clouds.png" width="400" alt="Laravel Logo">
+<img src="resources/images/cowboy-in-clouds.png" width="100%" alt="Laravel Logo">
 </p>
 
 ## Getting started

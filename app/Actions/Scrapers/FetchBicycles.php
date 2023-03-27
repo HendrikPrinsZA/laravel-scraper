@@ -42,6 +42,12 @@ class FetchBicycles
         ]);
 
         $hits = collect($response->json('hits.hits'));
+        if ($hits->isEmpty()) {
+            $command->info('Done processing');
+
+            return;
+        }
+
         $upserts = collect();
         foreach ($hits as $hit) {
             $registeredAt = Carbon::parse(data_get($hit, '_source.RegistrationDate'));
@@ -56,12 +62,6 @@ class FetchBicycles
                 'storage_location' => data_get($hit, '_source.StorageLocation.Name'),
                 'registered_at' => $registeredAt,
             ]);
-        }
-
-        if ($upserts->isEmpty()) {
-            $command->info('Done processing');
-
-            return;
         }
 
         Bicycle::upsert($upserts->toArray(), ['object_number'], [

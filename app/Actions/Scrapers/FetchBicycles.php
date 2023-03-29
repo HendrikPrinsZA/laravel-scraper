@@ -14,7 +14,7 @@ class FetchBicycles
 
     public string $commandSignature = 'scraper:fetch-bicycles';
 
-    public string $commandDescription = 'Fetch impounded bicycles from www.verlorenofgevonden.nl';
+    public string $commandDescription = 'Fetch bicycles from https://verlorenofgevonden.nl for the last month';
 
     public function asCommand(Command $command): void
     {
@@ -23,6 +23,9 @@ class FetchBicycles
 
     public function handle(Command $command): void
     {
+        $command->info($this->commandDescription);
+        $command->newLine();
+
         $this->fetch($command, now()->subMonth(), now());
     }
 

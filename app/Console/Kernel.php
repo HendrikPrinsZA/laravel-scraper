@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Actions\Scrapers\FetchBicycles;
+use App\Actions\Scrapers\FetchRedditPosts;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -10,6 +11,7 @@ class Kernel extends ConsoleKernel
 {
     protected $commands = [
         FetchBicycles::class,
+        FetchRedditPosts::class,
     ];
 
     protected function schedule(Schedule $schedule): void

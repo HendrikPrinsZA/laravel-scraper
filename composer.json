@@ -46,6 +46,9 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
+        ],
+        "lint-and-fix": [
+            "./vendor/bin/pint"
         ]
     },
     "extra": {

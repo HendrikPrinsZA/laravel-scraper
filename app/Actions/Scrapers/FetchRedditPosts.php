@@ -2,7 +2,6 @@
 
 namespace App\Actions\Scrapers;
 
-use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
@@ -51,30 +50,11 @@ class FetchRedditPosts
 
         $this->clear();
         $this->append('# What happened on Reddit?');
-        $this->append("There are quite a few relevant subreddits, but we'll focus on the 2 most popular and active ones to start with. To narrow the scope further, we'll restrict the posts to links only. Based on my initial investigation this should show the most value.");
+        $this->append("There are quite a few relevant subreddits, but we'll focus on the 2 most popular and active ones to start with. To narrow the scope, we'll restrict the posts to links only.");
         $this->newLine();
 
         foreach (self::SUBREDDITS as $subreddit) {
             $this->fetch($subreddit);
-        }
-    }
-
-    private function append(string $line): void
-    {
-        $this->command->line($line);
-        Storage::append($this->filepath, $line);
-    }
-
-    private function newLine(): void
-    {
-        $line = "\n";
-        $this->append($line);
-    }
-
-    private function clear(): void
-    {
-        if (Storage::exists($this->filepath)) {
-            Storage::delete($this->filepath);
         }
     }
 
@@ -119,6 +99,25 @@ class FetchRedditPosts
             if ($idx >= 9) {
                 break;
             }
+        }
+    }
+
+    private function append(string $line): void
+    {
+        $this->command->line($line);
+        Storage::append($this->filepath, $line);
+    }
+
+    private function newLine(): void
+    {
+        $line = "\n";
+        $this->append($line);
+    }
+
+    private function clear(): void
+    {
+        if (Storage::exists($this->filepath)) {
+            Storage::delete($this->filepath);
         }
     }
 }

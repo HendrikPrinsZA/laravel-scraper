@@ -28,12 +28,12 @@ cp .env.example .env
 ```
 
 ## Commands
-- Fetch impounded bicycles from https://www.verlorenofgevonden.nl
-  - `sail artisan scraper:fetch-bicycles`
 - Fetch top posts from Reddit
   - `sail artisan scraper:fetch-reddit-posts`
 - Fetch top posts from Twitter
   - `sail artisan scraper:fetch-twitter-posts`
+- Fetch bicycles impounded in The Netherlands
+  - `sail artisan scraper:fetch-bicycles`
 
 ---
 ## Related articles

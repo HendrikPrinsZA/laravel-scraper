@@ -1,13 +1,14 @@
 <?php
 
 use App\Exceptions\ApiException;
+use App\Http\Controllers\BicycleController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'auth'], function () {
-    Route::post('/token', function (Request $request) {
+    Route::post('token', function (Request $request) {
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
@@ -27,7 +28,7 @@ Route::group(['prefix' => 'auth'], function () {
         ];
     });
 
-    Route::post('/register', function (Request $request) {
+    Route::post('register', function (Request $request) {
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
@@ -56,5 +57,7 @@ Route::group(['prefix' => 'auth'], function () {
 });
 
 Route::middleware(['auth:sanctum', 'abilities:api-full'])->group(function () {
-    Route::get('/me', fn (Request $request) => $request->user());
+    Route::get('me', fn (Request $request) => $request->user());
+
+    Route::apiResource('bicycles', BicycleController::class);
 });

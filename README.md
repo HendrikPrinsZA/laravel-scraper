@@ -39,3 +39,4 @@ cp .env.example .env
 ## Related articles
 - <a href="https://hendrikprinsza.medium.com/practical-guide-how-to-build-a-web-scraper-with-laravel-actions-63575c33df71">Practical Guide: How to Build a Web Scraper with Laravel Actions</a>
 - <a href="https://hendrikprinsza.medium.com/trending-posts-related-to-php-and-laravel-in-march-2023-f640e5c97436">Trending Posts Related to PHP and Laravel in March 2023</a>
+- <a href="https://hendrikprinsza.medium.com/fetching-tweets-in-laravel-with-pythons-social-networking-services-scraper-c53db78c014e">Fetching Tweets in Laravel With Python’s Social Networking Services Scraper</a>

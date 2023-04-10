@@ -12,13 +12,11 @@ class ShellCommand
         $process = Process::fromShellCommandline($cmd);
 
         $processOutput = '';
-
         $captureOutput = function ($type, $line) use (&$processOutput) {
             $processOutput .= $line;
         };
 
-        $process->setTimeout(null)
-            ->run($captureOutput);
+        $process->setTimeout(null)->run($captureOutput);
 
         if ($process->getExitCode()) {
             $exception = new Exception($cmd.' - '.$processOutput);

@@ -96,11 +96,14 @@ class FetchTwitterPosts
             ),
         ];
 
-        ShellCommand::execute(sprintf(
+        $command = sprintf(
             '%s >> %s',
             implode(' ', $commandArgs),
             $filepathLogAbs
-        ));
+        );
+
+        $this->command->info(sprintf('Executing: %s', $command));
+        ShellCommand::execute($command);
 
         if ($minFaves > 1) {
             sleep(60);

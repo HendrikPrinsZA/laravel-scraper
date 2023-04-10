@@ -10,7 +10,9 @@
         "laravel/framework": "^10.0",
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
-        "lorisleiva/laravel-actions": "^2.5"
+        "league/html-to-markdown": "^5.1",
+        "lorisleiva/laravel-actions": "^2.5",
+        "roach-php/laravel": "^2.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

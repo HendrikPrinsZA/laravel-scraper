@@ -2,6 +2,7 @@
 
 namespace App\Actions\Scrapers;
 
+use App\Services\BlogPostService;
 use App\Spiders\BlogPostSpider;
 use Illuminate\Console\Command;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -15,13 +16,17 @@ class FetchBlogPosts
 
     public string $commandDescription = 'Fetch blog posts';
 
+    public function __construct(protected BlogPostService $blogPostService) { }
+
     public function asCommand(Command $command): void
     {
-        $items = Roach::collectSpider(BlogPostSpider::class);
+        $blogPosts = Roach::collectSpider(BlogPostSpider::class);
 
-        foreach ($items as $item) {
-            $command->info(sprintf('URI: %s', $item['uri']));
-            $command->line(sprintf("```md\n%s\n```", $item['markdown']));
+        /** @var \App\Objects\BlogPostObject $blogPost */
+        foreach ($blogPosts as $blogPost) {
+            $command->info(sprintf('URI: %s', $blogPost->uri));
+            $command->line(sprintf("```md\n%s\n```", $blogPost->markdown));
+            $command->info(sprintf('Feedback: %s', $blogPost->feedback));
         }
     }
 }

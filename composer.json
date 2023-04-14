@@ -12,7 +12,9 @@
         "laravel/tinker": "^2.8",
         "league/html-to-markdown": "^5.1",
         "lorisleiva/laravel-actions": "^2.5",
-        "roach-php/laravel": "^2.0"
+        "orhanerday/open-ai": "^4.7",
+        "roach-php/laravel": "^2.0",
+        "voku/simple_html_dom": "^4.8"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

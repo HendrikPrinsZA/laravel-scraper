@@ -92,6 +92,11 @@ return [
             'driver' => 'octane',
         ],
 
+        'open-ai' => [
+            'driver' => 'redis',
+            'connection' => 'open-ai',
+            'lock_connection' => 'default',
+        ],
     ],
 
     /*

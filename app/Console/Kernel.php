@@ -3,7 +3,7 @@
 namespace App\Console;
 
 use App\Actions\Scrapers\FetchBicycles;
-use App\Actions\Scrapers\FetchBlogPosts;
+use App\Actions\Scrapers\FetchBlogPost;
 use App\Actions\Scrapers\FetchRedditPosts;
 use App\Actions\Scrapers\FetchTwitterPosts;
 use Illuminate\Console\Scheduling\Schedule;
@@ -15,7 +15,7 @@ class Kernel extends ConsoleKernel
         FetchBicycles::class,
         FetchRedditPosts::class,
         FetchTwitterPosts::class,
-        FetchBlogPosts::class,
+        FetchBlogPost::class,
     ];
 
     protected function schedule(Schedule $schedule): void

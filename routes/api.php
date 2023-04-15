@@ -1,11 +1,16 @@
 <?php
 
+use App\Actions\Scrapers\FetchBlogPost;
 use App\Exceptions\ApiException;
 use App\Http\Controllers\BicycleController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
+
+Route::group(['prefix' => 'scrapers'], function () {
+    Route::post('blog', FetchBlogPost::class);
+});
 
 Route::group(['prefix' => 'auth'], function () {
     Route::post('token', function (Request $request) {

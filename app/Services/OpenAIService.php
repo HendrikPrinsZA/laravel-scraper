@@ -13,9 +13,13 @@ use Orhanerday\OpenAi\OpenAi;
 class OpenAIService
 {
     protected const BYPASS_CACHE = false;
+
     protected const CACHE_STORE = 'open-ai';
+
     protected const OPEN_AI_MODEL = 'gpt-3.5-turbo';
+
     protected const OPEN_AI_TEMPERATURE = 0.80;
+
     protected const MAX_WORD_COUNT = 400;
 
     protected Repository $cache;
@@ -90,7 +94,7 @@ class OpenAIService
             'messages' => [
                 [
                     'role' => 'system',
-                    'content' => $prompt
+                    'content' => $prompt,
                 ],
             ],
             'temperature' => self::OPEN_AI_TEMPERATURE,
@@ -108,7 +112,7 @@ class OpenAIService
         }
 
         $answer = data_get($response, 'choices.0.message.content');
-        if (!is_null($answer)) {
+        if (! is_null($answer)) {
             return $answer;
         }
 

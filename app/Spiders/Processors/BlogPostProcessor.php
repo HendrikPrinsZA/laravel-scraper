@@ -11,7 +11,9 @@ class BlogPostProcessor implements ItemProcessorInterface
 {
     use Configurable;
 
-    public function __construct(protected BlogPostService $blogPostService) { }
+    public function __construct(protected BlogPostService $blogPostService)
+    {
+    }
 
     public function processItem(ItemInterface $blogPost): ItemInterface
     {

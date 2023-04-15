@@ -16,7 +16,9 @@ class FetchBlogPosts
 
     public string $commandDescription = 'Fetch blog posts';
 
-    public function __construct(protected BlogPostService $blogPostService) { }
+    public function __construct(protected BlogPostService $blogPostService)
+    {
+    }
 
     public function asCommand(Command $command): void
     {

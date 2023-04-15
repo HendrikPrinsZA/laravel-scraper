@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+
+./vendor/bin/pint --dirty
+
+if [[ $(git diff --stat) != '' ]]; then
+  printf "\n${RED}Exception: Pint applied some changes! Check and commit again!${NC}\n"
+  exit 1
+fi

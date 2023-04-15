@@ -30,6 +30,7 @@ class ItemDroppedExtension implements ExtensionInterface
             ));
 
             $this->runningInConsole = true;
+
             return;
         }
     }
@@ -52,7 +53,7 @@ class ItemDroppedExtension implements ExtensionInterface
 
     protected function error(string $message): void
     {
-        if (!$this->runningInConsole) {
+        if (! $this->runningInConsole) {
             throw new Exception('Only supported in terminal at the moment, more work needed');
         }
 

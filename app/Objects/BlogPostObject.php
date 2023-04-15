@@ -17,12 +17,18 @@ namespace App\Objects;
 class BlogPostObject extends BaseObject
 {
     public string $uri = '';
+
     public string $html = '';
+
     public string $title = '';
+
     public array $tags = [];
+
     public string $htmlArticle = '';
+
     public string $markdown = '';
+
     public string $feedback = '';
+
     public string $suggestions = '';
 }
-

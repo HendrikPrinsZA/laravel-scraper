@@ -12,6 +12,7 @@ namespace App\Objects;
  * @property string $htmlArticle
  * @property string $markdown
  * @property string $feedback
+ * @property string $suggestions
  */
 class BlogPostObject extends BaseObject
 {
@@ -22,5 +23,6 @@ class BlogPostObject extends BaseObject
     public string $htmlArticle = '';
     public string $markdown = '';
     public string $feedback = '';
+    public string $suggestions = '';
 }
 

@@ -26,7 +26,8 @@ class FetchBlogPosts
         foreach ($blogPosts as $blogPost) {
             $command->info(sprintf('URI: %s', $blogPost->uri));
             $command->line(sprintf("```md\n%s\n```", $blogPost->markdown));
-            $command->info(sprintf('Feedback: %s', $blogPost->feedback));
+            $command->info(sprintf("Feedback\n%s\n\n", $blogPost->feedback));
+            $command->info(sprintf("Suggestions\n%s\n\n", $blogPost->suggestions));
         }
     }
 }

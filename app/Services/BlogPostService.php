@@ -53,6 +53,9 @@ class BlogPostService
         $blogPost->feedback = $this->openAIService
             ->getFeedback($blogPost->markdown, $blogPost->tags);
 
+        $blogPost->suggestions = $this->openAIService
+            ->getTitleSuggestions($blogPost->markdown, $blogPost->tags);
+
         return $blogPost;
     }
 }

@@ -9,13 +9,10 @@ use Orhanerday\OpenAi\OpenAi;
 
 /**
  * Call the OpenAI service
- *
- * TODO:
- * - Check why the
  */
 class OpenAIService
 {
-    protected const BYPASS_CACHE = true;
+    protected const BYPASS_CACHE = false;
     protected const CACHE_STORE = 'open-ai';
     protected const OPEN_AI_MODEL = 'gpt-3.5-turbo';
     protected const OPEN_AI_TEMPERATURE = 0.80;
@@ -23,14 +20,18 @@ class OpenAIService
 
     protected Repository $cache;
 
+    protected OpenAi $openAI;
+
     public function __construct()
     {
         $this->cache = Cache::store(self::CACHE_STORE);
+
+        $this->openAI = new OpenAi(config('openai.api_key'));
     }
 
     public function getFeedback(string $markdown, array $tags = []): string
     {
-        $key = md5($markdown);
+        $key = sprintf('feedback-%s', md5($markdown));
 
         if (! self::BYPASS_CACHE && $this->cache->has($key)) {
             $feedback = $this->cache->get($key);
@@ -43,40 +44,67 @@ class OpenAIService
         return $feedback;
     }
 
-    /**
-     * Get feedback from OpenAI
-     */
+    public function getTitleSuggestions(string $markdown, array $tags = []): string
+    {
+        $key = sprintf('suggestions-%s', md5($markdown));
+
+        if (! self::BYPASS_CACHE && $this->cache->has($key)) {
+            $feedback = $this->cache->get($key);
+        } else {
+            $feedback = $this->getTitleSuggestionsFromOpenAI($markdown, $tags);
+        }
+
+        $this->cache->set($key, $feedback);
+
+        return $feedback;
+    }
+
     private function getFeedbackFromOpenAI(string $markdown, array $tags, int $subMaxTokens = 0): string
     {
-        $openAiClient = new OpenAi(config('openai.api_key'));
-
         $promtLines = [
             sprintf('Act as an editor knowledgable in: %s.', implode(', ', $tags)),
             sprintf('Provide 10 short suggestion to improve the following article: %s', $markdown),
         ];
 
-        $content = implode(' ', $promtLines);
+        $prompt = implode(' ', $promtLines);
 
+        return $this->callOpenAI($prompt);
+    }
+
+    private function getTitleSuggestionsFromOpenAI(string $markdown, array $tags, int $subMaxTokens = 0): string
+    {
+        $promtLines = [
+            sprintf('Act as an editor knowledgable in: %s.', implode(', ', $tags)),
+            sprintf('Generate 3 titles with subtitles to make the following article trend: %s', $markdown),
+        ];
+
+        $prompt = implode(' ', $promtLines);
+
+        return $this->callOpenAI($prompt);
+    }
+
+    private function callOpenAI(string $prompt, int $subMaxTokens = 0): string
+    {
         $request = [
             'model' => self::OPEN_AI_MODEL,
             'messages' => [
                 [
                     'role' => 'system',
-                    'content' => $content
+                    'content' => $prompt
                 ],
             ],
             'temperature' => self::OPEN_AI_TEMPERATURE,
-            'max_tokens' => (4097 - str_word_count($content)) - $subMaxTokens,
+            'max_tokens' => (4097 - str_word_count($prompt)) - $subMaxTokens,
             'frequency_penalty' => 0,
             'presence_penalty' => 0,
         ];
 
-        $jsonResponse = $openAiClient->chat($request);
+        $jsonResponse = $this->openAI->chat($request);
 
         $response = json_decode($jsonResponse, true);
 
         if (data_get($response, 'error.code') === 'context_length_exceeded') {
-            return $this->getFeedbackFromOpenAI($markdown, $tags, $subMaxTokens += 100);
+            return $this->callOpenAI($prompt, $subMaxTokens += 100);
         }
 
         $answer = data_get($response, 'choices.0.message.content');

@@ -54,7 +54,7 @@ class BlogPostSpider extends BasicSpider
             'uri' => $response->getRequest()->getUri(),
             'title' => $response->filter('h1.pw-post-title')->text(),
             'html' => $html,
-            'htmlArticle' => $response->filter('article')->html(),
+            'htmlArticle' => $response->filter('section')->html(),
             'tags' => $tags,
         ]));
     }

@@ -31,6 +31,8 @@ class BlogPostSpider extends BasicSpider
         if (preg_match("/^(https?:\/\/)?([\w\.]+\.)*medium\.com/i", $uri)) {
             return $this->parseMedium($response);
         }
+
+        // TODO: Throw exception here!
     }
 
     /**

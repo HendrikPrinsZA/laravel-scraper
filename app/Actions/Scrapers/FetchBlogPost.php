@@ -43,7 +43,9 @@ class FetchBlogPost extends Action
             return $this->error('Expected parameter "url" not found');
         }
 
-        return BlogPostResource::make($this->process($request->url));
+        return $this->success(BlogPostResource::make(
+            $this->process($request->url)
+        ));
     }
 
     // Tried, but doesn't work?!?

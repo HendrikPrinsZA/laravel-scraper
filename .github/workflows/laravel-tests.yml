@@ -46,7 +46,9 @@ jobs:
           cp .env.example .env
           php artisan key:generate
 
-      - name: Launch frontend
+      - name: Launch fronten
+        env:
+          LARAVEL_BYPASS_ENV_CHECK: 1
         run: |
           npm i --ignore-scripts
           npm run dev

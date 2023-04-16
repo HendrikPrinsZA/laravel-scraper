@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "beyondcode/laravel-websockets": "^1.14",
         "guzzlehttp/guzzle": "^7.5",
         "inertiajs/inertia-laravel": "^0.6.8",
         "laravel/framework": "^10.0",
@@ -14,6 +15,7 @@
         "league/html-to-markdown": "^5.1",
         "lorisleiva/laravel-actions": "^2.5",
         "orhanerday/open-ai": "^4.7",
+        "pusher/pusher-php-server": "^7.2",
         "roach-php/laravel": "^2.0",
         "tightenco/ziggy": "^1.0",
         "voku/simple_html_dom": "^4.8"

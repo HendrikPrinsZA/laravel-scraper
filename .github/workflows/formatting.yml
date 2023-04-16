@@ -8,7 +8,7 @@ on:
 
 jobs:
   laravel-pint:
-    name: PHP (Laravel Pint)
+    name: Laravel Pint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo

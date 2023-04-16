@@ -7,6 +7,7 @@ on:
 
 jobs:
   laravel-tests:
+    name: Laravel Paratest
     runs-on: ubuntu-latest
 
     container:

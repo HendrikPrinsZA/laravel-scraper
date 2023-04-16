@@ -20,10 +20,7 @@ class BlogPostSpider extends BasicSpider
         BlogPostProcessor::class,
     ];
 
-    public array $startUrls = [
-        'https://medium.com/@soulaimaneyh/php-clean-code-tricks-everyone-should-know-afd406bd00bc',
-        // 'https://medium.com/p/c53db78c014e', // Fetching Tweets in Laravel With Python’s Social Networking Services Scraper
-    ];
+    public array $startUrls = [];
 
     public function parse(Response $response): Generator
     {
@@ -34,6 +31,8 @@ class BlogPostSpider extends BasicSpider
         if (preg_match("/^(https?:\/\/)?([\w\.]+\.)*medium\.com/i", $uri)) {
             return $this->parseMedium($response);
         }
+
+        // TODO: Throw exception here!
     }
 
     /**

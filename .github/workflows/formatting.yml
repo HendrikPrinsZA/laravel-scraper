@@ -1,4 +1,4 @@
-name: CodingStandards
+name: Formatting
 
 on:
   push:
@@ -13,16 +13,19 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick
           coverage: none
+
       - name: Install dependencies
         uses: ramsey/composer-install@v2
-      # - name: Run composer install
-      #   run: composer install --no-scripts
+        with:
+          composer-options: "--no-scripts"
+
       - name: Run style format
         run: ./vendor/bin/pint --test -v --ansi
 

@@ -1,4 +1,4 @@
-name: LaravelTests
+name: Tests
 on:
   push:
     branches: [ main ]
@@ -24,13 +24,13 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 1
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
-      - name: Install composer dependencies
-        run: |
-          composer install --no-scripts
+      - name: Install dependencies
+        uses: ramsey/composer-install@v2
+        with:
+          composer-options: "--no-scripts"
 
       - name: Create test databases
         run: |

@@ -1,10 +1,16 @@
 <script setup>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import { useBlogPostStore } from '@/stores/blogPostStore.js';
+import { onMounted } from 'vue';
 
 const blogPostStore = useBlogPostStore();
 
 const url = 'https://medium.com/@soulaimaneyh/php-clean-code-tricks-everyone-should-know-afd406bd00bc';
+
+onMounted(() => {
+    window.Echo.channel('events')
+        .listen('RealTimeMessage', (e) => console.log('RealTimeMessage: ' + e.message));
+})
 </script>
 
 <template>

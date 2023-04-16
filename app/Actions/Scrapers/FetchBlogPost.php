@@ -4,6 +4,7 @@ namespace App\Actions\Scrapers;
 
 use App\Actions\Action;
 use App\Actions\Resources\BlogPostResource;
+use App\Events\RealTimeMessage;
 use App\Objects\BlogPostObject;
 use App\Services\BlogPostService;
 use App\Spiders\BlogPostSpider;
@@ -41,6 +42,11 @@ class FetchBlogPost extends Action
 
         if (is_null($url)) {
             return $this->error('Expected parameter "url" not found');
+        }
+
+        for ($i = 0; $i < 3; $i++) {
+            event(new RealTimeMessage(sprintf('Hallo at %s', now()->toDateTimeString())));
+            sleep(1);
         }
 
         return $this->success(BlogPostResource::make(

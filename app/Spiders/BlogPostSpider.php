@@ -49,7 +49,7 @@ class BlogPostSpider extends BasicSpider
             $tags[] = $tagElement->text();
         }
 
-        yield $this->item(BlogPostObject::create([
+        yield $this->item(BlogPostObject::make([
             'uri' => $response->getRequest()->getUri(),
             'title' => $response->filter('h1.pw-post-title')->text(),
             'html' => $html,

@@ -1,4 +1,4 @@
-name: Laravel Tests
+name: LaravelTests
 on:
   push:
     branches: [ main ]
@@ -31,6 +31,15 @@ jobs:
       - name: Install composer dependencies
         run: |
           composer install --no-scripts
+
+      - name: Create test databases
+        run: |
+          which mysql
+          mysql -uroot -ppassword -e 'DROP DATABASE IF EXISTS testing_test_1; CREATE DATABASE testing_test_1;'
+          mysql -uroot -ppassword -e 'DROP DATABASE IF EXISTS testing_test_2; CREATE DATABASE testing_test_2;'
+          mysql -uroot -ppassword -e 'DROP DATABASE IF EXISTS testing_test_3; CREATE DATABASE testing_test_3;'
+          mysql -uroot -ppassword -e 'DROP DATABASE IF EXISTS testing_test_4; CREATE DATABASE testing_test_4;'
+          mysql -uroot -ppassword -e 'DROP DATABASE IF EXISTS testing_test_5; CREATE DATABASE testing_test_5;'
 
       - name: Prepare Laravel Application
         run: |

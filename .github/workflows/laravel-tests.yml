@@ -37,7 +37,12 @@ jobs:
           cp .env.example .env
           php artisan key:generate
 
-      - name: Run Tests
+      - name: Launch frontend
+        run: |
+          npm i
+          npm run dev
+
+      - name: Run tests
         env:
           DB_CONNECTION: mysql
           DB_HOST: mysql

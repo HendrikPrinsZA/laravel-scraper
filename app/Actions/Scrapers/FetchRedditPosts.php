@@ -3,6 +3,7 @@
 namespace App\Actions\Scrapers;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -11,14 +12,16 @@ class FetchRedditPosts
 {
     use AsAction;
 
-    protected const MAX_COUNT = 100;
+    public const HOST = 'https://www.reddit.com';
 
-    protected const PERIOD = 'month';
-
-    protected const SUBREDDITS = [
+    public const SUBREDDITS = [
         'r/PHP',
         'r/laravel',
     ];
+
+    protected const MAX_COUNT = 100;
+
+    protected const PERIOD = 'month';
 
     public string $commandSignature = 'scraper:fetch-reddit-posts';
 
@@ -45,30 +48,42 @@ class FetchRedditPosts
 
     public function handle(): void
     {
-        $this->command->info($this->commandDescription);
-        $this->command->newLine();
+        $this->command?->info($this->commandDescription);
+        $this->command?->newLine();
 
         $this->clear();
-        $this->append('# What happened on Reddit?');
-        $this->append("There are quite a few relevant subreddits, but we'll focus on the 2 most popular and active ones to start with. To narrow the scope, we'll restrict the posts to links only.");
-        $this->newLine();
+        $out = $this->fetch();
+        $this->append($out);
 
-        foreach (self::SUBREDDITS as $subreddit) {
-            $this->fetch($subreddit);
-        }
+        $this->command?->info(sprintf('Saved file at ./storage/app/%s', $this->filepath));
     }
 
-    private function fetch(string $subreddit): void
+    public function fetch(): string
     {
-        $subredditUrl = sprintf('https://www.reddit.com/%s/top/.json', $subreddit);
+        $lines = collect();
 
-        $this->append(sprintf('## Subreddit %s', $subreddit));
-        $this->append(sprintf(
+        $lines->push('# What happened on Reddit?');
+        $lines->push("There are quite a few relevant subreddits, but we'll focus on the 2 most popular and active ones to start with. To narrow the scope, we'll restrict the posts to links only.");
+        $lines->push('');
+        foreach (self::SUBREDDITS as $subreddit) {
+            $lines->push(...$this->fetchSubreddit($subreddit));
+        }
+
+        return $lines->join("\n");
+    }
+
+    public function fetchSubreddit(string $subreddit): Collection
+    {
+        $subredditUrl = sprintf('%s/%s/top/.json', self::HOST, $subreddit);
+
+        $lines = collect();
+        $lines->push(sprintf('## Subreddit <a href="%s">%s</a>', $subredditUrl, $subreddit));
+        $lines->push(sprintf(
             'Top 10 posts in the <a href="%s">%s</a> community.',
             $subredditUrl,
             $subreddit
         ));
-        $this->newLine();
+        $lines->push('');
 
         $response = Http::acceptJson()->get($subredditUrl, [
             'count' => self::MAX_COUNT,
@@ -86,32 +101,27 @@ class FetchRedditPosts
                 data_get($post, 'data.id')
             );
 
-            $this->append(sprintf(
+            $lines->push(sprintf(
                 '**#%d) <a href="%s">%s</a>**',
                 ($idx + 1),
                 $postLink,
                 data_get($post, 'data.title')
             ));
-            $this->newLine();
-            $this->append(data_get($post, 'data.url_overridden_by_dest'));
-            $this->newLine();
+            $lines->push('');
+            $lines->push(data_get($post, 'data.url_overridden_by_dest'));
+            $lines->push('');
 
             if ($idx >= 9) {
                 break;
             }
         }
+
+        return $lines;
     }
 
     private function append(string $line): void
     {
-        $this->command->line($line);
-        Storage::append($this->filepath, $line);
-    }
 
-    private function newLine(): void
-    {
-        $line = "\n";
-        $this->append($line);
     }
 
     private function clear(): void

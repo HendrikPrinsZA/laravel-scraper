@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 /*
@@ -49,6 +50,30 @@ function asUser(): TestCase
     }
 
     return test()->actingAs($user);
+}
+
+function setupMockResponse(string $url, array $response): void
+{
+    Http::fake([
+        sprintf('%s*', $url) => $response,
+    ]);
+}
+
+function getFileContents(string $filepath): mixed
+{
+    expect($filepath)->toBeReadableFile();
+
+    $extension = pathinfo($filepath, PATHINFO_EXTENSION);
+    $data = match ($extension) {
+        'json' => json_decode(file_get_contents($filepath), true),
+        default => null
+    };
+
+    if (is_null($data)) {
+        throw new Exception(sprintf('Unable to parse file: %s', $filepath));
+    }
+
+    return $data;
 }
 
 /*

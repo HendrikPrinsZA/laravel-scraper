@@ -4,7 +4,8 @@
         "dev": "vite",
         "build": "vite build",
         "prepare": "husky install",
-        "reset": "./bin/reset.sh"
+        "reset": "./bin/reset.sh",
+        "test": "./vendor/bin/sail composer test"
     },
     "devDependencies": {
         "@inertiajs/vue3": "^1.0.0",

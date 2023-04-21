@@ -28,6 +28,7 @@
         "nunomaduro/collision": "^7.0",
         "pestphp/pest-plugin-laravel": "^2.0",
         "phpunit/phpunit": "^10.0",
+        "plannr/laravel-fast-refresh-database": "^1.0",
         "spatie/laravel-ignition": "^2.0"
     },
     "autoload": {

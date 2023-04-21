@@ -3,10 +3,11 @@
 namespace Tests;
 
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Plannr\Laravel\FastRefreshDatabase\Traits\FastRefreshDatabase;
 
 abstract class TestCase extends BaseTestCase
 {
-    use CreatesApplication;
+    use CreatesApplication, FastRefreshDatabase;
 
     protected function setUp(): void
     {

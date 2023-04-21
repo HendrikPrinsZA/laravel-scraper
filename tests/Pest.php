@@ -45,10 +45,12 @@ function asUser(): TestCase
 {
     $user = User::firstWhere('email', 'test@example.com');
 
-    // User::factory()->create([
-    //     'email' => 'test@example.com',
-    //     'name' => 'Test User',
-    // ]);
+    if (is_null($user)) {
+        $user = User::factory()->create([
+            'email' => 'test@example.com',
+            'name' => 'Test User',
+        ]);
+    }
 
     return test()->actingAs($user);
 }

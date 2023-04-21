@@ -38,6 +38,14 @@ jobs:
           cp .env.example .env
           php artisan key:generate
 
+      - name: Create test databases
+        run: |
+          mysql -hmysql -uroot -ppassword -e 'DROP DATABASE IF EXISTS testing; CREATE DATABASE testing;'
+          mysql -hmysql -uroot -ppassword -e 'DROP DATABASE IF EXISTS testing_test_1; CREATE DATABASE testing_test_1;'
+          mysql -hmysql -uroot -ppassword -e 'DROP DATABASE IF EXISTS testing_test_2; CREATE DATABASE testing_test_2;'
+          mysql -hmysql -uroot -ppassword -e 'DROP DATABASE IF EXISTS testing_test_3; CREATE DATABASE testing_test_3;'
+          mysql -hmysql -uroot -ppassword -e 'DROP DATABASE IF EXISTS testing_test_4; CREATE DATABASE testing_test_4;'
+
       - name: Run tests
         env:
           DB_CONNECTION: mysql

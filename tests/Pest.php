@@ -15,10 +15,6 @@ use Tests\TestCase;
 */
 uses(TestCase::class)->beforeAll(function () {
     // Runs before each file...
-    // User::factory()->create([
-    //     'name' => 'Test User',
-    //     'email' => 'test@example.com',
-    // ]);
 
 })->beforeEach(function () {
     // Runs before each test...

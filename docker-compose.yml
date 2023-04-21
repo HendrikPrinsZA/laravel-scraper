@@ -1,6 +1,7 @@
 version: '3'
 services:
     laravel.test:
+        container_name: laravel-scraper
         build:
             context: ./docker/8.2
             dockerfile: Dockerfile
@@ -28,11 +29,12 @@ services:
             - mailpit
             - selenium
     mysql:
+        container_name: laravel-scraper-mysql
         image: 'mysql/mysql-server:8.0'
         ports:
             - '${FORWARD_DB_PORT:-3306}:3306'
         environment:
-            MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+            MYSQL_ROOT_PASSWORD: '${DB_ROOT_PASSWORD}'
             MYSQL_ROOT_HOST: '%'
             MYSQL_DATABASE: '${DB_DATABASE}'
             MYSQL_USER: '${DB_USERNAME}'
@@ -52,6 +54,7 @@ services:
             retries: 3
             timeout: 5s
     redis:
+        container_name: laravel-scraper-redis
         image: 'redis:alpine'
         ports:
             - '${FORWARD_REDIS_PORT:-6379}:6379'
@@ -67,7 +70,9 @@ services:
             retries: 3
             timeout: 5s
     meilisearch:
+        container_name: laravel-scraper-meilisearch
         image: 'getmeili/meilisearch:latest'
+        platform: linux/amd64
         ports:
             - '${FORWARD_MEILISEARCH_PORT:-7700}:7700'
         volumes:
@@ -84,6 +89,7 @@ services:
             retries: 3
             timeout: 5s
     mailpit:
+        container_name: laravel-scraper-mailpit
         image: 'axllent/mailpit:latest'
         ports:
             - '${FORWARD_MAILPIT_PORT:-1025}:1025'
@@ -91,7 +97,9 @@ services:
         networks:
             - sail
     selenium:
+        container_name: laravel-scraper-selenium
         image: selenium/standalone-chrome
+        platform: linux/amd64
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         volumes:

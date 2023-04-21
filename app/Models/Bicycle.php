@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\HasCollection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Bicycle extends Model
 {
+    use HasCollection, HasFactory;
+
     protected $fillable = [
         'object_number',
         'type',

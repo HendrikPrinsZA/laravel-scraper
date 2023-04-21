@@ -3,7 +3,8 @@
     "scripts": {
         "dev": "vite",
         "build": "vite build",
-        "prepare": "husky install"
+        "prepare": "husky install",
+        "reset": "./bin/reset.sh"
     },
     "devDependencies": {
         "@inertiajs/vue3": "^1.0.0",

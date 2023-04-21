@@ -7,6 +7,12 @@
     <testsuite name="Feature">
       <directory suffix="Test.php">./tests/Feature</directory>
     </testsuite>
+    <testsuite name="PestFeature">
+        <directory suffix="Test.php">./tests/PestFeature</directory>
+    </testsuite>
+    <testsuite name="PestUnit">
+        <directory suffix="Test.php">./tests/PestUnit</directory>
+    </testsuite>
   </testsuites>
   <coverage/>
   <php>

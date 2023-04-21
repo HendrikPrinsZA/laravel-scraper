@@ -99,6 +99,10 @@ if [ ! "${APP_ENV}" == "local" ]; then
   exit 1
 fi
 
+if helper_confirm "Remove all docker artefacts for this environment"; then
+    ./vendor/bin/sail down --rmi all -v
+fi
+
 # Launch sail environment
 ./vendor/bin/sail down && ./vendor/bin/sail up -d --build
 
@@ -106,7 +110,7 @@ fi
 ./vendor/bin/sail artisan key:generate --no-interaction
 
 # Migrate
-./vendor/bin/sail artisan migrate
+./vendor/bin/sail artisan migrate --seed
 
 exit 0
 

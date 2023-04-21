@@ -2,20 +2,28 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\Environments\LocalSeeder;
+use Database\Seeders\Environments\ProductionSeeder;
+use Database\Seeders\Environments\TestingSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        $this->call(DefaultSeeder::class);
 
-        \App\Models\User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        switch (app()->environment()) {
+            case 'local':
+                $this->call(LocalSeeder::class);
+                break;
+            case 'testing':
+                $this->call(TestingSeeder::class);
+                break;
+            case 'staging':
+            case 'production':
+                $this->call(ProductionSeeder::class);
+                break;
+        }
     }
 }

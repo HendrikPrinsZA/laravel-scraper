@@ -2,8 +2,9 @@
 
 namespace App\Actions\Scrapers;
 
+use App\Collections\RedditPostObjectCollection;
+use App\Objects\RedditPostObject;
 use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -52,13 +53,13 @@ class FetchRedditPosts
         $this->command?->newLine();
 
         $this->clear();
-        $out = $this->fetch();
-        $this->append($out);
+        $out = $this->getMarkdownText();
+        $this->write($out);
 
         $this->command?->info(sprintf('Saved file at ./storage/app/%s', $this->filepath));
     }
 
-    public function fetch(): string
+    public function getMarkdownText(): string
     {
         $lines = collect();
 
@@ -66,24 +67,36 @@ class FetchRedditPosts
         $lines->push("There are quite a few relevant subreddits, but we'll focus on the 2 most popular and active ones to start with. To narrow the scope, we'll restrict the posts to links only.");
         $lines->push('');
         foreach (self::SUBREDDITS as $subreddit) {
-            $lines->push(...$this->fetchSubreddit($subreddit));
+            $lines->push(sprintf(
+                '## Subreddit <a href="%s/%s">%s</a>',
+                self::HOST,
+                $subreddit,
+                $subreddit
+            ));
+
+            $lines->push('Top 10 posts in the past month.');
+            $lines->push('');
+
+            $this->fetchPosts($subreddit)->slice(0, 10)
+                ->each(function (RedditPostObject $post, int $index) use ($lines) {
+                    $lines->push(sprintf(
+                        '**#%d) <a href="%s">%s</a>**',
+                        ($index + 1),
+                        $post->uri,
+                        $post->title
+                    ));
+                    $lines->push('');
+                    $lines->push($post->targetUri);
+                    $lines->push('');
+                });
         }
 
         return $lines->join("\n");
     }
 
-    public function fetchSubreddit(string $subreddit): Collection
+    public function fetchPosts(string $subreddit): RedditPostObjectCollection
     {
         $subredditUrl = sprintf('%s/%s/top/.json', self::HOST, $subreddit);
-
-        $lines = collect();
-        $lines->push(sprintf('## Subreddit <a href="%s">%s</a>', $subredditUrl, $subreddit));
-        $lines->push(sprintf(
-            'Top 10 posts in the <a href="%s">%s</a> community.',
-            $subredditUrl,
-            $subreddit
-        ));
-        $lines->push('');
 
         $response = Http::acceptJson()->get($subredditUrl, [
             'count' => self::MAX_COUNT,
@@ -95,33 +108,20 @@ class FetchRedditPosts
             ->filter(fn ($post) => ! empty(data_get($post, 'data.url_overridden_by_dest')))
             ->values();
 
-        foreach ($posts as $idx => $post) {
-            $postLink = sprintf(
-                'https://www.reddit.com/r/PHP/comments/%s/',
-                data_get($post, 'data.id')
-            );
+        $redditPosts = RedditPostObjectCollection::make();
+        $posts->each(fn ($post) => $redditPosts->push(RedditPostObject::make([
+            'uri' => sprintf('%s/r/PHP/comments/%s/', self::HOST, data_get($post, 'data.id')),
+            'title' => data_get($post, 'data.title'),
+            'targetUri' => data_get($post, 'data.url_overridden_by_dest'),
+        ]))
+        );
 
-            $lines->push(sprintf(
-                '**#%d) <a href="%s">%s</a>**',
-                ($idx + 1),
-                $postLink,
-                data_get($post, 'data.title')
-            ));
-            $lines->push('');
-            $lines->push(data_get($post, 'data.url_overridden_by_dest'));
-            $lines->push('');
-
-            if ($idx >= 9) {
-                break;
-            }
-        }
-
-        return $lines;
+        return $redditPosts;
     }
 
-    private function append(string $line): void
+    private function write(string $text): void
     {
-
+        Storage::append($this->filepath, $text);
     }
 
     private function clear(): void

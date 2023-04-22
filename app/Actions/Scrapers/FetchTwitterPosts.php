@@ -3,6 +3,7 @@
 namespace App\Actions\Scrapers;
 
 use App\Utilities\ShellCommand;
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
@@ -103,7 +104,15 @@ class FetchTwitterPosts
         );
 
         $this->command->info(sprintf('Executing: %s', $command));
-        ShellCommand::execute($command);
+
+        try {
+            ShellCommand::execute($command);
+        } catch (Exception $e) {
+            throw new Exception(sprintf(
+                'Unable to fetch tweets with snscrape, probably due to %s',
+                'https://github.com/JustAnotherArchivist/snscrape/issues/846'
+            ));
+        }
 
         if ($minFaves > 1) {
             sleep(60);

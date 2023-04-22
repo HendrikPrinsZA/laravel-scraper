@@ -19,6 +19,11 @@ abstract class BaseObject extends AbstractItem implements Arrayable, Jsonable, J
         return new static($properties);
     }
 
+    public static function make(array $properties = []): self
+    {
+        return self::create($properties);
+    }
+
     protected function setProperties(array $properties): void
     {
         foreach ($properties as $key => $value) {
